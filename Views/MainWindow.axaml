@@ -1,0 +1,60 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DairyFarm.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="DairyFarm.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Симулятор Молочной Фермы">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <StackPanel Margin="20">
+        <Button Content="Добавить новую ферму" 
+                Command="{Binding AddFarmCommand}"
+                Margin="0 0 0 20"/>
+
+        <ItemsControl ItemsSource="{Binding Farms}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Gray" BorderThickness="1" 
+                            Margin="10" Padding="15">
+                        <StackPanel Spacing="10">
+                            <TextBlock Text="Хранилище молока" FontWeight="Bold"/>
+                            <ProgressBar Minimum="0" 
+                                       Maximum="{Binding Warehouse.MaxCapacity}"
+                                       Value="{Binding Warehouse.CurrentMilk}"
+                                       Height="60" Width="200"/>
+                            
+                            <TextBlock Text="{Binding Warehouse.CurrentMilk, 
+                                       StringFormat=Молоко: {0}/{1},
+                                       ConverterParameter={Binding Warehouse.MaxCapacity}}"/>
+                            
+                            <StackPanel Orientation="Horizontal" Spacing="15">
+                                <TextBlock Text="Погрузчик:"/>
+                                <TextBlock Text="{Binding Loader.IsBusy, 
+                                           StringFormat=Занят: {0}}"/>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal" Spacing="15">
+                                <TextBlock Text="Механик:"/>
+                                <TextBlock Text="{Binding Mechanic.IsBusy, 
+                                           StringFormat=Занят: {0}}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+</Window>
